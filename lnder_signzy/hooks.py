@@ -31,7 +31,8 @@ app_license = "mit"
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_js = {
     "Employee" : "customization/employee/employee.js",
-    "Driver" : "customization/driver/driver.js"
+    "Driver" : "customization/driver/driver.js",
+    "Bank Account" : "customization/bank_account/bank_account.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

@@ -366,6 +366,7 @@ def verify_pan(pan: str, name: str, dob: str):
 
 @frappe.whitelist()
 def verify_upi(vpa:str, name:str):
+	print("ddddddddddddddddddddddd")
 	"""
 	Verifies a UPI (Unified Payments Interface) ID using the Signzy API.
 
@@ -444,7 +445,7 @@ def verify_bank_acc(acc_no: str, ifsc_code: str, mobile_no: str, name: str ,emai
 
 	if email:
 		payload["email"] = email
-		payload = json.dumps(payload)
+	payload = json.dumps(payload)
 
 	headers = {
 		'Authorization': connector_doc.get_password("authorization"),

@@ -36,7 +36,7 @@ def create_employee_custom_field():
 				insert_after="custom_verify_aadhar",
 			),
 			dict(
-				fieldname="custom_verify_aadhaar_ocr",
+				fieldname="custom_verify_aadhar_ocr",
 				label="Verify Aadhaar OCR",
 				fieldtype="Button",
 				depends_on = "eval: doc.custom_aadhar_card_front_image",
@@ -47,8 +47,22 @@ def create_employee_custom_field():
 				label="Is Aadhar OCR Verified",
 				fieldtype="Check",
 				read_only = True,
-				insert_after="custom_verify_aadhaar_ocr",
-			)
+				insert_after="custom_verify_aadhar_ocr",
+			),
+			dict(
+				fieldname="custom_verify_pan",
+				label="Verify PAN",
+				fieldtype="Button",
+				depends_on = "eval:doc.custom_pan",
+				insert_after="custom_pan",
+			),
+			dict(
+				fieldname="custom_is_pan_verified",
+				label="Is PAN Verified",
+				fieldtype="Check",
+				read_only = True,
+				insert_after="custom_verify_pan",
+			),
 		]
 	}
 	create_custom_fields(custom_fields, update=True)

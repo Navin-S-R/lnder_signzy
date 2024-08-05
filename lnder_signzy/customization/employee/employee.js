@@ -61,8 +61,8 @@ frappe.ui.form.on("Employee", {
 			}
 		});
 	},
-	custom_verify_aadhaar_ocr: (frm) => {
-		if (frm.doc.custom_verify_aadhaar_ocr || !frm.doc.custom_aadhar_card_front_image || !frm.doc.custom_aadhar_card_back_image) {
+	custom_verify_aadhar_ocr: (frm) => {
+		if (frm.doc.custom_verify_aadhar_ocr || !frm.doc.custom_aadhar_card_front_image || !frm.doc.custom_aadhar_card_back_image) {
 			return;
 		}
 	
@@ -82,7 +82,34 @@ frappe.ui.form.on("Employee", {
 				}
 			}
 		});
-	}
+	},
+	custom_verify_pan: (frm) => {
+		if (!frm.doc.first_name) {
+			frappe.throw(__("Enter the Name"));
+		}
+	
+		if (!frm.doc.date_of_birth) {
+			frappe.throw(__("Enter the Date of Birth"));
+		}
+	
+		const args = {
+			pan: frm.doc.custom_pan,
+			name: frm.doc.employee_name,
+			dob: frm.doc.date_of_birth
+		};
+	
+		frappe.call({
+			method: "lnder_signzy.signzy_api.verify_pan",
+			args: args,
+			freeze: true,
+			freeze_message: __("Verifying PAN Number"),
+			callback: (r) => {
+				if (!r.exec && r.message.result) {
+					handle_pan_verification_result(frm, r.message.result);
+				}
+			}
+		});
+	}	
 });
 function submit_otp(frm, country_code, mobile_no, reference_id, otp) {
 	frappe.call({
@@ -120,4 +147,13 @@ function handle_aadhaar_verification_result(frm, result) {
 function handle_aadhaar_ocr_verification_result(frm, result) {
 	frm.set_value("custom_is_aadhar_ocr_verified", 1)
 	frappe.msgprint(__("Aadhaar Number Verified Successfully"));
+}
+
+function handle_pan_verification_result(frm, result) {
+	const isVerified = result.panStatus === "E" && result.dob === "Y" && result.name === "Y";
+	const verificationStatus = isVerified ? 1 : 0;
+	const message = isVerified ? __("PAN Number Verified Successfully") : __("PAN Verification Failed");
+
+	frm.set_value("custom_is_pan_verified", verificationStatus)
+	frappe.msgprint(message);
 }
